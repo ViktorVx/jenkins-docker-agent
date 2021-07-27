@@ -15,34 +15,18 @@ RUN apt-get update && \
     adduser --quiet jenkins && \
 # Set password for the jenkins user (you may want to alter this).
     echo "jenkins:jenkins" | chpasswd && \
-    mkdir /home/jenkins/.m2 && \
-    mkdir /var/lib/jenkins && \
-    mkdir /var/lib/jenkins/.ssh && \
-    mkdir /var/lib/jenkins/.ssh/authorized_keys
+    mkdir /home/jenkins/.m2
 
 #ADD settings.xml /home/jenkins/.m2/
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
-COPY .ssh/authorized_keys /var/lib/jenkins/.ssh/authorized_keys
 
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/ && \
     chown -R jenkins:jenkins /home/jenkins/.ssh/ && \
-    chown -R jenkins:jenkins /home/jenkins/.ssh/authorized_keys/ && \
-    chown -R jenkins:jenkins /home/jenkins/.ssh/authorized_keys/id_rsa && \
-    chown -R jenkins:jenkins /home/jenkins/.ssh/authorized_keys/id_rsa.pub && \
-    chown -R jenkins:jenkins /var/lib/jenkins/ && \
-    chown -R jenkins:jenkins /var/lib/jenkins/.ssh/ && \
-    chown -R jenkins:jenkins /var/lib/jenkins/.ssh/authorized_keys/ && \
-    chown -R jenkins:jenkins /var/lib/jenkins/.ssh/authorized_keys/id_rsa && \
-    chown -R jenkins:jenkins /var/lib/jenkins/.ssh/authorized_keys/id_rsa.pub
+    chown -R jenkins:jenkins /home/jenkins/.ssh/authorized_keys
 
-RUN chmod 600 /home/jenkins/.ssh/
-RUN chmod 600 /home/jenkins/.ssh/authorized_keys/
-RUN chmod 600 /var/lib/jenkins/.ssh/authorized_keys/
-RUN chmod 600 /var/lib/jenkins/.ssh/
-RUN chmod 600 /var/lib/jenkins/
+RUN chmod 700 /home/jenkins/.ssh/
 
-RUN rm -f /run/nologin
 # Standard SSH port
 EXPOSE 22
 
