@@ -9,7 +9,7 @@ RUN apt-get update && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
     mkdir -p /var/run/sshd && \
 # Install JDK 8 (latest stable edition at 2019-04-01)
-    apt-get install -qy openjdk-8-jdk && \
+    apt-get install -qy openjdk-11-jdk && \
 # Install maven
     apt-get install -qy maven && \
 # Cleanup old packages
