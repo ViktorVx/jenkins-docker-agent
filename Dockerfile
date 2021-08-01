@@ -20,7 +20,12 @@ RUN apt-get update && \
     echo "jenkins:jenkins" | chpasswd && \
     mkdir /home/jenkins/.m2
 
-#ADD settings.xml /home/jenkins/.m2/
+RUN apt-get install -qy software-properties-common && \
+    apt-get install -qy apt-transport-https ca-certificates && \
+    apt-get install -qy curl && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
+    apt-get install -qy docker-ce docker-ce-cli containerd.io
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
