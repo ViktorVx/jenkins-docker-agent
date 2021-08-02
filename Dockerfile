@@ -27,23 +27,9 @@ RUN apt-get install -qy software-properties-common && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
     apt-get install -qy docker-ce docker-ce-cli containerd.io
 
-#VOLUME ["/var/run/docker.sock"]
-#RUN chown -R jenkins:jenkins /var/run/docker.sock
-
-#VOLUME ["/var/run/docker.sock"]
-#RUN touch /var/run/docker.sock
-#RUN chown -R jenkins:jenkins /var/run/docker.sock
-#RUN usermod -a -G docker jenkins
-
-#RUN touch /var/run/docker.sock
-#RUN chown root:docker /var/run/docker.sock
-#RUN usermod -a -G docker jenkins
-
-#WORKS!!!
 RUN touch /var/run/docker.sock
 RUN chown root:docker /var/run/docker.sock
 RUN usermod -a -G docker jenkins
-#WORKS!!!
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
