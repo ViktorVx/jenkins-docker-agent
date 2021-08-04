@@ -27,6 +27,8 @@ RUN apt-get install -qy software-properties-common && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
     apt-get install -qy docker-ce docker-ce-cli containerd.io
 
+RUN curl https://cli-assets.heroku.com/install.sh | sh
+
 RUN touch /var/run/docker.sock
 RUN groupmod -g 133 docker # GID of docker-group on root docker host
 RUN chown root:docker /var/run/docker.sock
