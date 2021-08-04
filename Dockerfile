@@ -1,7 +1,6 @@
-FROM maven:3-openjdk-11
+FROM ubuntu:18.04
 
-LABEL maintainer="ViktorVx <victorptrv@yandex.ru>"
-
+# Make sure the package repository is up to date.
 RUN apt-get update && \
     apt-get -qy full-upgrade && \
     apt-get install -qy git && \
@@ -9,6 +8,10 @@ RUN apt-get update && \
     apt-get install -qy openssh-server && \
     sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd && \
     mkdir -p /var/run/sshd && \
+# Install JDK 8 (latest stable edition at 2019-04-01)
+    apt-get install -qy openjdk-11-jdk && \
+# Install maven
+    apt-get install -qy maven && \
 # Cleanup old packages
     apt-get -qy autoremove && \
 # Add user jenkins to the image
@@ -17,7 +20,20 @@ RUN apt-get update && \
     echo "jenkins:jenkins" | chpasswd && \
     mkdir /home/jenkins/.m2
 
-#ADD settings.xml /home/jenkins/.m2/
+RUN apt-get install -qy software-properties-common && \
+    apt-get install -qy apt-transport-https ca-certificates && \
+    apt-get install -qy curl && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
+    apt-get install -qy docker-ce docker-ce-cli containerd.io
+
+RUN curl https://cli-assets.heroku.com/install.sh | sh
+
+RUN touch /var/run/docker.sock
+RUN groupmod -g 133 docker # GID of docker-group on root docker host
+RUN chown root:docker /var/run/docker.sock
+RUN usermod -a -G docker jenkins
+RUN chmod 777 /var/run/docker.sock
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
