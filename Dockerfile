@@ -28,8 +28,10 @@ RUN apt-get install -qy software-properties-common && \
     apt-get install -qy docker-ce docker-ce-cli containerd.io
 
 RUN touch /var/run/docker.sock
+RUN groupmod -g 133 docker
 RUN chown root:docker /var/run/docker.sock
 RUN usermod -a -G docker jenkins
+RUN chmod 777 /var/run/docker.sock
 # Copy authorized keys
 COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
 
